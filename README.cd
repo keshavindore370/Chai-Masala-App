@@ -1,0 +1,15 @@
+# Task Manager System (Backend)
+
+A robust backend service built with **Java Spring Boot** and **MongoDB** for efficient task tracking and management.
+
+## Tech Stack
+* **Language:** Java 21
+* **Framework:** Spring Boot 3.x
+* **Database:** MongoDB
+* **Build Tool:** Maven
+* **Security:** Spring Security (OAuth2)
+
+## Key Features
+* RESTful APIs for Task CRUD operations.
+* Secure authentication using Google OAuth2.
+* MongoDB integration for flexible data storage.
