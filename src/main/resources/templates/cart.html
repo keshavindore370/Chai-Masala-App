@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout | Chai Maslaa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --primary: #d2691e; --dark: #3e2723; }
+        body {
+            background: url('https://images.unsplash.com/photo-1594631252845-29fc45865157?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(62, 39, 35, 0.7); z-index: 1; }
+
+        .main-container {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            width: 90%;
+            max-width: 1000px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        }
+
+        /* Left Side: Item Details */
+        .item-section { flex: 1; padding: 40px; border-right: 1px solid rgba(255, 255, 255, 0.1); color: white; }
+        .product-img { width: 100%; border-radius: 20px; margin-bottom: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        .price-tag { font-size: 2rem; font-weight: 600; color: #ffcc80; margin: 10px 0; }
+
+        /* Right Side: Form Details */
+        .form-section { flex: 1.2; padding: 40px; background: rgba(255, 255, 255, 0.95); }
+        h2 { color: var(--dark); margin-top: 0; }
+        .input-group { margin-bottom: 15px; text-align: left; }
+        label { display: block; font-size: 12px; font-weight: 600; color: #666; margin-bottom: 5px; }
+        input, select {
+            width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #ddd;
+            box-sizing: border-box; font-family: inherit;
+        }
+        .place-btn {
+            background: var(--primary); color: white; border: none; width: 100%;
+            padding: 15px; border-radius: 15px; font-weight: 600; cursor: pointer;
+            transition: 0.3s; margin-top: 20px; font-size: 16px;
+        }
+        .place-btn:hover { background: var(--dark); transform: translateY(-3px); }
+        .back-home { display: block; text-align: center; margin-top: 15px; color: #666; text-decoration: none; font-size: 13px; }
+    </style>
+</head>
+<body>
+
+<div class="overlay"></div>
+
+<div class="main-container">
+    <div class="item-section">
+        <a href="/" style="color: white; text-decoration: none; font-size: 13px;"><i class="fas fa-arrow-left"></i> Back</a>
+        <h1 style="margin-top: 20px;">Your Selection</h1>
+        <img src="https://images.unsplash.com/photo-1561336313-0bd5e0b27ec8?auto=format&fit=crop&w=500&q=60" class="product-img" alt="Chai Masala">
+        <h3>Premium Chai Masala</h3>
+        <p style="font-size: 14px; opacity: 0.8;">Experience the authentic taste of Indore in every sip.</p>
+        <div class="price-tag" id="displayBill">₹350.00</div>
+    </div>
+
+    <div class="form-section">
+        <h2>Checkout Details</h2>
+        <form th:action="@{/place-order}" method="post">
+            <div style="display: flex; gap: 10px;">
+                <div class="input-group" style="flex: 1;">
+                    <label>Weight</label>
+                    <select name="weight" id="weight" onchange="updatePrice()">
+                        <option value="100g">100g (₹150)</option>
+                        <option value="250g" selected>250g (₹350)</option>
+                        <option value="500g">500g (₹650)</option>
+                    </select>
+                </div>
+                <div class="input-group" style="flex: 1;">
+                    <label>Quantity</label>
+                    <input type="number" name="quantity" id="qty" value="1" min="1" onchange="updatePrice()">
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Phone Number</label>
+                <input type="text" name="phone" placeholder="Enter 10 digit mobile" required>
+            </div>
+
+            <div class="input-group">
+                <label>Delivery Address</label>
+                <input type="text" name="address" placeholder="Full Address" required>
+            </div>
+
+            <div class="input-group">
+                <label>Pincode</label>
+                <input type="text" name="pincode" placeholder="452001" required>
+            </div>
+
+            <input type="hidden" name="totalBill" id="totalBill" value="350">
+
+            <button type="submit" class="place-btn">Confirm & Place Order</button>
+            <a href="/" class="back-home">Modify Cart</a>
+        </form>
+    </div>
+</div>
+
+<script>
+    function updatePrice() {
+        const weight = document.getElementById('weight').value;
+        const qty = document.getElementById('qty').value;
+        let basePrice = 350;
+
+        if(weight === '100g') basePrice = 150;
+        if(weight === '500g') basePrice = 650;
+
+        const total = basePrice * qty;
+        document.getElementById('displayBill').innerText = "₹" + total.toFixed(2);
+        document.getElementById('totalBill').value = total;
+    }
+</script>
+
+</body>
+</html>

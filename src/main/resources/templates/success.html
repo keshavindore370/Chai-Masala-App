@@ -1,0 +1,157 @@
+<div class="tracking-card">
+    <div class="tracking-header">
+        <i class="fas fa-box-open"></i>
+        <h2>Track Your Spice Pack</h2>
+        <p th:text="'Order ID: #' + ${order.id}">Order ID: #MASALA101</p>
+    </div>
+
+    <div class="timeline">
+        <div class="checkpoint active">
+            <div class="status-icon">
+                <i class="fas fa-check"></i>
+            </div>
+            <div class="details">
+                <strong>Order Confirmed</strong>
+                <p>Spices are being packed</p>
+            </div>
+        </div>
+
+        <div th:class="${order.status == 'OUT_FOR_DELIVERY' || order.status == 'DELIVERED' ? 'checkpoint active' : 'checkpoint'}">
+            <div class="status-icon">
+                <i class="fas fa-truck-fast"></i>
+            </div>
+            <div class="details">
+                <strong>Shipped</strong>
+                <p>Your spice partner is on the way</p>
+            </div>
+        </div>
+
+        <div th:class="${order.status == 'DELIVERED' ? 'checkpoint active' : 'checkpoint'}">
+            <div class="status-icon">
+                <i class="fas fa-home"></i>
+            </div>
+            <div class="details">
+                <strong>Delivered</strong>
+                <p>Time to brew some magic!</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="tracking-footer">
+        <p>Expected Delivery: <span th:text="${order.estimatedDelivery}">30-45 Minutes</span></p>
+    </div>
+</div>
+
+<style>
+    .tracking-card {
+        background: #ffffff;
+        padding: 40px;
+        border-radius: 30px;
+        box-shadow: 0 20px 50px rgba(62, 39, 35, 0.1);
+        max-width: 450px;
+        margin: 40px auto;
+        border: 1px solid rgba(210, 105, 30, 0.1);
+    }
+
+    .tracking-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .tracking-header i {
+        font-size: 2.5rem;
+        color: #d2691e;
+        margin-bottom: 15px;
+    }
+
+    .tracking-header h2 {
+        color: #3e2723;
+        margin: 0;
+        font-weight: 600;
+    }
+
+    .tracking-header p {
+        color: #bc8e5e;
+        font-size: 0.85rem;
+        margin-top: 5px;
+    }
+
+    .timeline {
+        position: relative;
+        padding-left: 50px;
+    }
+
+    /* Vertical Connector Line */
+    .timeline::before {
+        content: '';
+        position: absolute;
+        left: 17px;
+        top: 0;
+        width: 3px;
+        height: 85%;
+        background: #eee;
+        border-radius: 10px;
+    }
+
+    .checkpoint {
+        position: relative;
+        margin-bottom: 45px;
+        opacity: 0.3;
+        transition: all 0.6s ease;
+    }
+
+    .checkpoint.active {
+        opacity: 1;
+    }
+
+    .status-icon {
+        position: absolute;
+        left: -50px;
+        width: 36px;
+        height: 36px;
+        background: #f4e9d8;
+        color: #3e2723;
+        border: 3px solid #fff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        z-index: 2;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        transition: 0.4s;
+    }
+
+    .checkpoint.active .status-icon {
+        background: #d2691e;
+        color: white;
+        box-shadow: 0 5px 15px rgba(210, 105, 30, 0.3);
+    }
+
+    .details strong {
+        display: block;
+        color: #3e2723;
+        font-size: 1rem;
+        margin-bottom: 4px;
+    }
+
+    .details p {
+        margin: 0;
+        font-size: 0.85rem;
+        color: #888;
+    }
+
+    .tracking-footer {
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px dashed #eee;
+        text-align: center;
+        color: #3e2723;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .tracking-footer span {
+        color: #d2691e;
+    }
+</style>

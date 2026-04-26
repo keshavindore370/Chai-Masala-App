@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kadak Masala | Asli Desi Chai</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <style>
+    :root {
+      --bg:       #0e0905;
+      --bg2:      #150d08;
+      --card:     #1a1008;
+      --brown:    #3e2723;
+      --gold:     #c8872a;
+      --gold2:    #e8a84a;
+      --amber:    #ff9800;
+      --cream:    #f5e6c8;
+      --text:     #e8d5b0;
+      --muted:    #8a7560;
+      --border:   rgba(200,135,42,0.18);
+      --glow:     rgba(200,135,42,0.25);
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.5;
+    }
+
+    /* ── CANVAS PARTICLES ── */
+    #particles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
+
+    /* ════════════════════════════════
+       NAVBAR
+    ════════════════════════════════ */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 80px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(14,9,5,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      transition: all 0.3s ease;
+    }
+
+    .logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 30px;
+      font-weight: 700;
+      text-decoration: none;
+      color: var(--cream);
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--gold);
+      border-radius: 50%;
+      box-shadow: 0 0 12px var(--gold);
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.5); opacity: 0.7; }
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .nav-right a {
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 500;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .nav-right a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--gold);
+      transition: width 0.3s;
+    }
+
+    .nav-right a:hover { color: var(--gold2); }
+    .nav-right a:hover::after { width: 100%; }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--gold2);
+    }
+
+    .nav-cart-btn {
+      background: var(--border);
+      border: 1px solid var(--border);
+      padding: 8px 16px;
+      border-radius: 50px;
+      transition: all 0.3s;
+    }
+
+    .nav-cart-btn:hover {
+      background: var(--gold) !important;
+      color: var(--bg) !important;
+      border-color: var(--gold) !important;
+    }
+
+    /* ════════════════════════════════
+       HERO
+    ════════════════════════════════ */
+    .hero {
+      min-height: 92vh;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 80px 110px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-glow {
+      position: absolute;
+      width: 700px;
+      height: 700px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(200,135,42,0.12) 0%, transparent 65%);
+      top: 50%;
+      left: 30%;
+      transform: translate(-50%, -50%);
+      animation: glow-breathe 4s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes glow-breathe {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
+      50% { transform: translate(-50%, -50%) scale(1.12); opacity: 1; }
+    }
+
+    .hero-glow2 {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,152,0,0.08) 0%, transparent 70%);
+      bottom: -100px;
+      right: 200px;
+      animation: glow-breathe 6s ease-in-out infinite reverse;
+      pointer-events: none;
+    }
+
+    .hero-text {
+      position: relative;
+      z-index: 2;
+      max-width: 560px;
+    }
+
+    .hero-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 22px;
+      font-weight: 600;
+    }
+
+    .hero-label span {
+      display: inline-block;
+      width: 30px;
+      height: 1px;
+      background: var(--gold);
+    }
+
+    .hero-text h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 76px;
+      font-weight: 700;
+      line-height: 1.1;
+      color: var(--cream);
+      margin-bottom: 24px;
+    }
+
+    .hero-text h1 em {
+      font-style: italic;
+      color: var(--gold2);
+      display: block;
+    }
+
+    .hero-text p {
+      font-size: 16px;
+      color: var(--muted);
+      max-width: 420px;
+      margin-bottom: 40px;
+      line-height: 1.8;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--gold), var(--amber));
+      color: var(--bg);
+      padding: 16px 38px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 15px;
+      transition: all 0.4s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 8px 30px rgba(200,135,42,0.35);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--gold2), #ffb84d);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(200,135,42,0.5); }
+    .btn-primary:hover::before { opacity: 1; }
+    .btn-primary span { position: relative; z-index: 1; }
+
+    .btn-ghost {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s;
+      padding: 16px 10px;
+    }
+
+    .btn-ghost i { transition: transform 0.3s; }
+    .btn-ghost:hover { color: var(--gold); }
+    .btn-ghost:hover i { transform: translateX(4px); }
+
+    /* HERO IMAGE */
+    .hero-img-wrap {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-img-ring {
+      position: absolute;
+      width: 480px;
+      height: 480px;
+      border-radius: 50%;
+      border: 1px solid rgba(200,135,42,0.2);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: ring-spin 20s linear infinite;
+    }
+
+    .hero-img-ring::before {
+      content: '';
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: var(--gold);
+      border-radius: 50%;
+      top: 10px;
+      left: 50%;
+      box-shadow: 0 0 15px var(--gold);
+    }
+
+    @keyframes ring-float {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.4; }
+      50% { transform: translate(-50%, -50%) scale(1.06); opacity: 0.7; }
+    }
+    /* ── HERO IMAGE UPDATED (Rectangle Look) ── */
+    .hero img {
+      width: 480px;
+      height: 580px;
+      object-fit: cover;
+      border-radius: 40px; /* Rectangle with rounded corners */
+      display: block;
+      position: relative;
+      z-index: 5;
+      border: 1px solid var(--border);
+      /* Clarity Fix: Contrast and Brightness added */
+      filter: brightness(1.1) contrast(1.1);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 0 50px rgba(200,135,42,0.1);
+    }
+
+    /* ── HERO RING UPDATED (Rectangle-ish) ── */
+    .hero-img-ring {
+      position: absolute;
+      width: 550px;
+      height: 550px;
+      border-radius: 60px; /* Square-ish shape to match image */
+      border: 1px solid rgba(200,135,42,0.15);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      /* New Floating Animation */
+      animation: ring-float 6s ease-in-out infinite;
+    }
+
+    /* ── STEAM POSITION FIX ── */
+    .steam-wrap {
+      position: absolute;
+      top: -40px; /* Adjusted for Rectangle top */
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 14px;
+      z-index: 6;
+    }
+    .steam {
+      width: 4px;
+      background: linear-gradient(to top, transparent, rgba(200,135,42,0.4), transparent);
+      border-radius: 10px;
+      animation: steam-rise 2.5s ease-in-out infinite;
+    }
+
+    .steam:nth-child(1) { height: 50px; animation-delay: 0s; }
+    .steam:nth-child(2) { height: 70px; animation-delay: 0.5s; }
+    .steam:nth-child(3) { height: 55px; animation-delay: 1s; }
+
+    @keyframes steam-rise {
+      0%   { transform: translateY(0) scaleX(1); opacity: 0; }
+      30%  { opacity: 1; }
+      100% { transform: translateY(-80px) scaleX(2); opacity: 0; }
+    }
+
+    /* ════════════════════════════════
+       MARQUEE
+    ════════════════════════════════ */
+    .marquee-strip {
+      background: linear-gradient(90deg, var(--gold), var(--amber), var(--gold));
+      padding: 14px 0;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .marquee-track {
+      display: flex;
+      gap: 0;
+      animation: marquee-scroll 22s linear infinite;
+      white-space: nowrap;
+    }
+
+    .marquee-track span {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--bg);
+      padding: 0 30px;
+    }
+
+    .marquee-track span.sep {
+      opacity: 0.5;
+      padding: 0;
+    }
+
+    @keyframes marquee-scroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ════════════════════════════════
+       FEATURES
+    ════════════════════════════════ */
+    .features-section {
+      padding: 90px 100px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .section-label {
+      text-align: center;
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 46px;
+      font-weight: 700;
+      text-align: center;
+      color: var(--cream);
+      margin-bottom: 60px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+
+    .feat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 40px 32px;
+      text-align: center;
+      transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      transform: scaleX(0);
+      transition: transform 0.4s;
+    }
+
+    .feat-card:hover { transform: translateY(-10px); border-color: rgba(200,135,42,0.4); box-shadow: 0 20px 60px rgba(200,135,42,0.12); }
+    .feat-card:hover::before { transform: scaleX(1); }
+
+    .feat-icon {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(200,135,42,0.2), rgba(200,135,42,0.05));
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 26px;
+      color: var(--gold);
+      transition: all 0.3s;
+    }
+
+    .feat-card:hover .feat-icon {
+      background: linear-gradient(135deg, var(--gold), var(--amber));
+      color: var(--bg);
+      box-shadow: 0 0 30px rgba(200,135,42,0.4);
+    }
+
+    .feat-card h4 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--cream);
+      margin-bottom: 10px;
+    }
+
+    .feat-card p {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* ════════════════════════════════
+       PRODUCTS
+    ════════════════════════════════ */
+    .products-section {
+      padding: 90px 100px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .products-section::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(ellipse at 50% 100%, rgba(200,135,42,0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+    }
+
+    .prod-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+      position: relative;
+    }
+
+    .prod-card:hover { transform: translateY(-12px); box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 40px rgba(200,135,42,0.15); border-color: rgba(200,135,42,0.4); }
+
+    .prod-img-wrap {
+      position: relative;
+      overflow: hidden;
+      height: 240px;
+    }
+
+    .prod-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+
+    .prod-card:hover .prod-img-wrap img { transform: scale(1.08); }
+
+    .prod-img-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, var(--card) 0%, transparent 50%);
+    }
+
+    .prod-badge {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: var(--gold);
+      color: var(--bg);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 20px;
+      z-index: 2;
+    }
+
+    .prod-info {
+      padding: 22px 24px 26px;
+    }
+
+    .prod-info h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--cream);
+      margin-bottom: 6px;
+    }
+
+    .prod-info p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 18px;
+      line-height: 1.6;
+    }
+
+    .prod-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .prod-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--gold2);
+    }
+
+    .prod-price sup {
+      font-size: 16px;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 400;
+    }
+
+    .cart-btn {
+      background: linear-gradient(135deg, var(--gold), var(--amber));
+      color: var(--bg);
+      padding: 10px 22px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 20px rgba(200,135,42,0.3);
+    }
+
+    .cart-btn:hover { transform: scale(1.05); box-shadow: 0 8px 30px rgba(200,135,42,0.5); }
+
+    /* ════════════════════════════════
+       ABOUT
+    ════════════════════════════════ */
+    .about-section {
+      padding: 100px 110px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 80px;
+      position: relative;
+      z-index: 2;
+      background: linear-gradient(135deg, rgba(21,13,8,0.8) 0%, rgba(14,9,5,0.5) 100%);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .about-section::before {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 50%;
+      background: radial-gradient(ellipse at 70% 50%, rgba(200,135,42,0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .about-text { max-width: 520px; position: relative; z-index: 2; }
+
+    .about-text h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 52px;
+      font-weight: 700;
+      color: var(--cream);
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+
+    .about-text h2 em {
+      font-style: italic;
+      color: var(--gold2);
+    }
+
+    .about-text p {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.9;
+      margin-bottom: 16px;
+    }
+
+    .about-divider {
+      width: 50px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+      margin: 28px 0;
+    }
+
+    .about-img-wrap {
+      position: relative;
+      flex-shrink: 0;
+      z-index: 2;
+    }
+
+    .about-img-frame {
+      position: absolute;
+      width: 380px;
+      height: 380px;
+      border: 1px solid rgba(200,135,42,0.25);
+      border-radius: 20px;
+      top: -20px;
+      left: 20px;
+      pointer-events: none;
+    }
+
+    .about-section img {
+      width: 360px;
+      height: 460px;
+      object-fit: cover;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+      position: relative;
+    }
+
+    /* ════════════════════════════════
+       FOOTER
+    ════════════════════════════════ */
+    footer {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      padding: 70px 110px 40px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr 1fr;
+      gap: 60px;
+      margin-bottom: 60px;
+    }
+
+    .footer-brand .logo {
+      display: inline-flex;
+      margin-bottom: 18px;
+    }
+
+    .footer-brand p {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.8;
+      max-width: 280px;
+    }
+
+    .footer-col h5 {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .footer-col a {
+      display: block;
+      text-decoration: none;
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 10px;
+      transition: all 0.3s;
+    }
+
+    .footer-col a:hover { color: var(--gold2); transform: translateX(4px); }
+
+    .footer-social {
+      display: flex;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .social-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--card);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 16px;
+      transition: all 0.3s;
+      text-decoration: none;
+    }
+
+    .social-icon:hover {
+      background: var(--gold);
+      color: var(--bg);
+      border-color: var(--gold);
+      box-shadow: 0 0 20px rgba(200,135,42,0.4);
+      transform: translateY(-3px);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--border);
+      padding-top: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-bottom p { font-size: 13px; color: var(--muted); }
+
+    .admin-link {
+      color: rgba(255,255,255,0.2) !important;
+      font-size: 11px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: color 0.3s;
+    }
+
+    .admin-link:hover { color: rgba(255,255,255,0.4) !important; }
+
+    /* ════════════════════════════════
+       SCROLL REVEAL
+    ════════════════════════════════ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ════════════════════════════════
+       MOBILE
+    ════════════════════════════════ */
+    @media (max-width: 900px) {
+      header { padding: 16px 24px; }
+      .hero { flex-direction: column; text-align: center; padding: 60px 28px; gap: 50px; }
+      .hero-text h1 { font-size: 48px; }
+      .hero-actions { justify-content: center; flex-wrap: wrap; }
+      .hero img { width: 300px; height: 360px; }
+      .hero-img-ring { width: 340px; height: 340px; }
+      .features-section, .products-section { padding: 60px 24px; }
+      .features-grid, .products-grid { grid-template-columns: 1fr; }
+      .about-section { flex-direction: column; padding: 60px 28px; gap: 40px; text-align: center; }
+      .about-section img { width: 100%; height: 280px; }
+      .about-divider { margin: 20px auto; }
+      .footer-grid { grid-template-columns: 1fr; gap: 36px; }
+      footer { padding: 50px 28px 30px; }
+      .footer-bottom { flex-direction: column; gap: 14px; text-align: center; }
+    }
+  </style>
+</head>
+
+<body>
+<canvas id="particles"></canvas>
+
+<!-- ══ NAVBAR ══ -->
+<header>
+  <a href="/" class="logo">
+    <span class="logo-dot"></span>
+    Kadak Masala
+  </a>
+
+  <div class="nav-right">
+    <a th:if="${name == null}" href="/login">
+      <i class="far fa-user"></i> Login
+    </a>
+
+    <span th:if="${name != null}" class="user-info">
+      <i class="fas fa-user-circle"></i>
+      <span th:text="${name}">User</span>
+    </span>
+
+    <a href="/cart" class="nav-cart-btn">
+      <i class="fas fa-shopping-basket"></i> Cart
+    </a>
+
+    <a th:if="${name != null}" href="/logout" style="color:#e57373;">
+      <i class="fas fa-sign-out-alt"></i>
+    </a>
+  </div>
+</header>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+
+  <div class="hero-text reveal">
+    <div class="hero-label">
+      <span></span>
+      Asli Desi Chai Masala
+      <span></span>
+    </div>
+    <h1>Har Cup Mein<em>Kadak Swad</em></h1>
+    <p>Authentic desi chai masala crafted with premium spices from the heart of Indore. Every sip, a tradition.</p>
+    <div class="hero-actions">
+      <a href="/cart?product=ChaiMasala" class="btn-primary">
+        <span><i class="fas fa-shopping-basket"></i> Shop Now</span>
+      </a>
+      <a href="#products" class="btn-ghost">
+        Explore All <i class="fas fa-arrow-right"></i>
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-img-wrap reveal reveal-delay-2">
+    <div class="hero-img-ring"></div>
+    <div class="steam-wrap">
+      <div class="steam"></div>
+      <div class="steam"></div>
+      <div class="steam"></div>
+    </div>
+    <img src="https://images.pexels.com/photos/6545224/pexels-photo-6545224.jpeg" alt="Chai">
+  </div>
+</section>
+
+<!-- ══ MARQUEE ══ -->
+<div class="marquee-strip">
+  <div class="marquee-track">
+    <span>100% Natural</span><span class="sep">|</span>
+    <span>Handcrafted Blends</span><span class="sep">|</span>
+    <span>Fast Delivery</span><span class="sep">|</span>
+    <span>Premium Spices</span><span class="sep">|</span>
+    <span>Made in Indore</span><span class="sep">|</span>
+    <span>No Artificial Flavours</span><span class="sep">|</span>
+    <span>100% Natural</span><span class="sep">|</span>
+    <span>Handcrafted Blends</span><span class="sep">|</span>
+    <span>Fast Delivery</span><span class="sep">|</span>
+    <span>Premium Spices</span><span class="sep">|</span>
+    <span>Made in Indore</span><span class="sep">|</span>
+    <span>No Artificial Flavours</span><span class="sep">|</span>
+  </div>
+</div>
+
+<!-- ══ FEATURES ══ -->
+<section class="features-section">
+  <p class="section-label">Why Choose Us</p>
+  <h2 class="section-title">The Kadak Promise</h2>
+
+  <div class="features-grid">
+    <div class="feat-card reveal">
+      <div class="feat-icon"><i class="fas fa-leaf"></i></div>
+      <h4>100% Natural</h4>
+      <p>No chemicals, no preservatives. Only the purest spices sourced directly from Indian farms.</p>
+    </div>
+    <div class="feat-card reveal reveal-delay-2">
+      <div class="feat-icon"><i class="fas fa-mortar-pestle"></i></div>
+      <h4>Handcrafted</h4>
+      <p>Traditional stone-ground spice blending method passed down through generations.</p>
+    </div>
+    <div class="feat-card reveal reveal-delay-3">
+      <div class="feat-icon"><i class="fas fa-truck"></i></div>
+      <h4>Fast Delivery</h4>
+      <p>Freshly packed masala delivered straight to your doorstep within 3 days.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PRODUCTS ══ -->
+<section class="products-section" id="products">
+  <p class="section-label">Our Collection</p>
+  <h2 class="section-title">Customer Favorites</h2>
+
+  <div class="products-grid">
+    <div class="prod-card reveal">
+      <div class="prod-img-wrap">
+        <span class="prod-badge">Best Seller</span>
+        <img src="https://images.pexels.com/photos/5947051/pexels-photo-5947051.jpeg" alt="Classic Chai Masala">
+      </div>
+      <div class="prod-info">
+        <h3>Classic Chai Masala</h3>
+        <p>The original blend — bold, aromatic, and deeply satisfying every morning.</p>
+        <div class="prod-footer">
+          <div class="prod-price"><sup>Rs.</sup>75</div>
+          <a href="/cart?product=ChaiMasala" class="cart-btn">
+            <i class="fas fa-plus"></i> Add to Cart
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="prod-card reveal reveal-delay-2">
+      <div class="prod-img-wrap">
+        <span class="prod-badge">Fresh Pick</span>
+        <img src="https://images.pexels.com/photos/6713028/pexels-photo-6713028.jpeg" alt="Natural Refreshener">
+      </div>
+      <div class="prod-info">
+        <h3>Natural Refreshener</h3>
+        <p>A cooling herbal blend — perfect for a refreshing afternoon cup.</p>
+        <div class="prod-footer">
+          <div class="prod-price"><sup>Rs.</sup>199</div>
+          <a href="/cart?product=Refreshener" class="cart-btn">
+            <i class="fas fa-plus"></i> Add to Cart
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="prod-card reveal reveal-delay-3">
+      <div class="prod-img-wrap">
+        <span class="prod-badge">Spicy</span>
+        <img src="https://images.pexels.com/photos/1484678/pexels-photo-1484678.jpeg" alt="Royal Ginger Special">
+      </div>
+      <div class="prod-info">
+        <h3>Royal Ginger Special</h3>
+        <p>Zingy, warming ginger masala with a royal punch that wakes you up.</p>
+        <div class="prod-footer">
+          <div class="prod-price"><sup>Rs.</sup>99</div>
+          <a href="/cart?product=Ginger" class="cart-btn">
+            <i class="fas fa-plus"></i> Add to Cart
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ ABOUT ══ -->
+<section class="about-section">
+  <div class="about-text reveal">
+    <p class="section-label" style="text-align:left;">Our Story</p>
+    <h2>From Indore<em>With Love</em></h2>
+    <div class="about-divider"></div>
+    <p>Kadak Masala brings the authentic taste of Indian street chai to your home. Our spice blends are carefully crafted to give every cup a bold aroma and kadak flavour you will never forget.</p>
+    <p>Born in the bustling chai culture of Indore, every packet carries the warmth of tradition and the promise of an exceptional brew.</p>
+    <a href="/cart?product=ChaiMasala" class="btn-primary" style="margin-top:10px;display:inline-flex;">
+      <span>Order Now <i class="fas fa-arrow-right"></i></span>
+    </a>
+  </div>
+
+  <div class="about-img-wrap reveal reveal-delay-2">
+    <div class="about-img-frame"></div>
+    <img src="https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg" alt="About Kadak Masala">
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="/" class="logo">
+        <span class="logo-dot"></span>
+        Kadak Masala
+      </a>
+      <p>Asli Desi Chai Masala — crafted with love, tradition, and the finest spices from the heart of India.</p>
+      <div class="footer-social" style="margin-top:24px;">
+        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <h5>Quick Links</h5>
+      <a href="/">Home</a>
+      <a href="#products">Shop</a>
+      <a href="/cart">My Cart</a>
+      <a href="/login">Login</a>
+    </div>
+
+    <div class="footer-col">
+      <h5>Contact</h5>
+      <a href="#">Indore, Madhya Pradesh</a>
+      <a href="#">info@kadakmasala.in</a>
+      <a href="#">+91 98765 43210</a>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2026 Kadak Masala. All rights reserved.</p>
+    <a href="/admin/orders" class="admin-link" th:href="@{/admin/orders}">
+      <i class="fas fa-lock"></i> Admin Access
+    </a>
+  </div>
+</footer>
+
+<!-- ══ PARTICLES ══ -->
+<script>
+  (function(){
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    let W, H, particles = [];
+
+    function resize(){ W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+    resize();
+    window.addEventListener('resize', resize);
+
+    const colors = ['rgba(200,135,42,', 'rgba(255,152,0,', 'rgba(232,168,74,'];
+
+    for(let i=0; i<55; i++){
+      particles.push({
+        x: Math.random()*1920,
+        y: Math.random()*1080,
+        r: Math.random()*2.5+0.5,
+        dy: -(Math.random()*0.4+0.15),
+        dx: (Math.random()-0.5)*0.2,
+        o: Math.random()*0.5+0.1,
+        c: colors[Math.floor(Math.random()*colors.length)]
+      });
+    }
+
+    function draw(){
+      ctx.clearRect(0,0,W,H);
+      particles.forEach(p=>{
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+        ctx.fillStyle = p.c + p.o + ')';
+        ctx.fill();
+        p.y += p.dy;
+        p.x += p.dx;
+        if(p.y < -10) { p.y = H+10; p.x = Math.random()*W; }
+      });
+      requestAnimationFrame(draw);
+    }
+    draw();
+  })();
+</script>
+
+<!-- ══ SCROLL REVEAL ══ -->
+<script>
+  (function(){
+    const els = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); }
+      });
+    }, { threshold: 0.12 });
+    els.forEach(el => obs.observe(el));
+  })();
+</script>
+
+</body>
+</html>

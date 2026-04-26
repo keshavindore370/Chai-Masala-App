@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | Chai Maslaa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-brown: #3e2723;
+            --accent-orange: #d2691e;
+            --soft-cream: #f4e9d8;
+        }
+
+        body {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+            url('https://images.unsplash.com/photo-1595033538458-94d58571099b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 40px;
+            padding: 50px 40px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+            max-width: 450px;
+            width: 100%;
+            text-align: center;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: var(--primary-brown);
+            font-weight: 600;
+            font-size: 2rem;
+            margin-bottom: 5px;
+            letter-spacing: -1px;
+        }
+
+        p.subtitle {
+            color: #6d4c41;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--accent-orange);
+            font-size: 18px;
+        }
+
+        .input-group input, .input-group textarea {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border-radius: 15px;
+            border: 2px solid transparent;
+            background: rgba(255, 255, 255, 0.9);
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            transition: 0.3s;
+            box-sizing: border-box;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--accent-orange);
+            background: #fff;
+            box-shadow: 0 10px 20px rgba(210, 105, 30, 0.1);
+        }
+
+        .payment-info {
+            background: #fff3e0;
+            padding: 15px;
+            border-radius: 20px;
+            margin: 25px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            border: 1px dashed var(--accent-orange);
+        }
+
+        .payment-info i { color: var(--accent-orange); }
+
+        .btn-order {
+            background: var(--primary-brown);
+            color: white;
+            width: 100%;
+            padding: 18px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 20px rgba(62, 39, 35, 0.3);
+        }
+
+        .btn-order:hover {
+            background: var(--accent-orange);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(210, 105, 30, 0.4);
+        }
+
+        .btn-order:active { transform: translateY(-2px); }
+
+    </style>
+</head>
+<body>
+
+<div class="glass-card">
+    <i class="fas fa-truck-fast fa-3x" style="color: var(--accent-orange); margin-bottom: 15px;"></i>
+    <h2>Secure Checkout</h2>
+    <p class="subtitle">Enter your details to receive your authentic blend.</p>
+
+    <form th:action="@{/place-order}" method="POST">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+        <div class="input-group">
+            <i class="fas fa-map-marker-alt"></i>
+            <input type="text" name="address" placeholder="Full Home Address" required>
+        </div>
+
+        <div class="input-group">
+            <i class="fas fa-location-dot"></i>
+            <input type="text" name="pincode" placeholder="Pincode (6 digits)"
+                   pattern="[0-9]{6}" title="Must be 6 digits" required>
+        </div>
+
+        <div class="input-group">
+            <i class="fas fa-phone"></i>
+            <input type="tel" name="phone" placeholder="Contact Number (10 digits)"
+                   pattern="[0-9]{10}" title="Must be 10 digits" required>
+        </div>
+
+        <div class="payment-info">
+            <i class="fas fa-wallet"></i>
+            <span style="color: #6d4c41; font-weight: 500; font-size: 14px;">
+                Payment: <strong>Cash on Delivery</strong>
+            </span>
+        </div>
+
+        <button type="submit" class="btn-order">
+            Confirm Order & Pay <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>
+        </button>
+    </form>
+</div>
+
+</body>
+</html>

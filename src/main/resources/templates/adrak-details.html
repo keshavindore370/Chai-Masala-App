@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Buy Adrak Masala | Chai Maslaa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-cream: #f4e9d8;
+            --primary-brown: #3e2723;
+            --accent-orange: #d2691e;
+        }
+
+        body {
+            background-color: var(--bg-cream);
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .order-container {
+            background: #ffffff;
+            padding: 45px;
+            border-radius: 40px;
+            box-shadow: 0 25px 70px rgba(62, 39, 35, 0.12);
+            width: 100%;
+            max-width: 460px;
+            text-align: center;
+        }
+
+        .product-badge {
+            background: #fef3e2;
+            color: var(--accent-orange);
+            font-size: 11px;
+            font-weight: 600;
+            padding: 5px 15px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .product-icon {
+            font-size: 3.5rem;
+            margin: 15px 0;
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1));
+        }
+
+        h2 {
+            color: var(--primary-brown);
+            margin: 5px 0;
+            font-weight: 600;
+        }
+
+        .tagline {
+            color: #8d6e63;
+            font-weight: 500;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .description {
+            color: #6d4c41;
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .price-box {
+            display: flex;
+            justify-content: center;
+            align-items: baseline;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .price-tag {
+            color: var(--accent-orange);
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        .unit { font-size: 14px; color: #999; }
+
+        .input-group { margin-bottom: 15px; position: relative; }
+        .input-group i { position: absolute; left: 18px; top: 16px; color: #bc8e5e; font-size: 14px; }
+
+        input {
+            width: 100%;
+            padding: 14px 15px 14px 48px;
+            border: 1.5px solid #f1f1f1;
+            border-radius: 18px;
+            box-sizing: border-box;
+            background: #fafafa;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--accent-orange);
+            background: #fff;
+            box-shadow: 0 5px 15px rgba(210, 105, 30, 0.1);
+        }
+
+        .order-btn {
+            background: var(--primary-brown);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 18px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: 0.4s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .order-btn:hover {
+            background: var(--accent-orange);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(210, 105, 30, 0.3);
+        }
+
+        .benefits {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 25px;
+            font-size: 11px;
+            color: #a7c0a5;
+            font-weight: 600;
+        }
+
+        .benefits span { display: flex; align-items: center; gap: 5px; }
+    </style>
+</head>
+<body>
+
+<div class="order-container">
+    <span class="product-badge">100% Organic Spices</span>
+    <div class="product-icon">📦</div>
+    <h2>Adrak Chai Masala</h2>
+    <span class="tagline">Authentic Ginger-Spice Blend</span>
+    <p class="description">Hand-pounded sun-dried ginger mixed with premium cloves and black pepper. Perfect for brewing 50+ cups of authentic Indori Chai.</p>
+
+    <div class="price-box">
+        <span class="price-tag">₹75</span>
+        <span class="unit">/ 100g pack</span>
+    </div>
+
+    <form th:action="@{/place-order}" method="post">
+        <div class="input-group">
+            <i class="fas fa-truck"></i>
+            <input type="text" name="address" placeholder="Shipping Address" required>
+        </div>
+
+        <div class="input-group">
+            <i class="fas fa-map-pin"></i>
+            <input type="text" name="pincode" placeholder="Pincode (6 digits)" pattern="[0-9]{6}" required>
+        </div>
+
+        <div class="input-group">
+            <i class="fas fa-phone"></i>
+            <input type="text" name="phone" placeholder="Contact Number" pattern="[0-9]{10}" required>
+        </div>
+
+        <button type="submit" class="order-btn">
+            <i class="fas fa-box-open"></i>
+            Order Spice Pack (COD)
+        </button>
+    </form>
+
+    <div class="benefits">
+        <span><i class="fas fa-leaf"></i> No Preservatives</span>
+        <span><i class="fas fa-shield-alt"></i> Sealed for Freshness</span>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Account | Chai Maslaa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #f4e9d8; font-family: 'Poppins', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 40px;
+            width: 400px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        .profile-pic { width: 100px; height: 100px; border-radius: 50%; border: 3px solid #d2691e; margin-bottom: 20px; }
+        .logout-btn { background: #e74c3c; color: white; padding: 10px 20px; border-radius: 20px; text-decoration: none; display: inline-block; margin-top: 20px; }
+    </style>
+</head>
+<body>
+<div class="glass-card">
+    <img class="profile-pic" src="https://www.pngarts.com/files/10/Default-Profile-Picture-PNG-Transparent-Image.png" alt="User">
+    <h2>Hello, <span th:text="${name}">User</span>!</h2>
+    <p>Welcome to your Chai Maslaa Dashboard.</p>
+    <a href="/logout" class="logout-btn">Logout</a>
+</div>
+</body>
+</html>

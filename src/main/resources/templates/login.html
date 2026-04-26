@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login | Chai Maslaa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { background-color: #f4e9d8; font-family: 'Poppins', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .login-container { background: #ffffff; padding: 40px; border-radius: 30px; box-shadow: 0 15px 35px rgba(62, 39, 35, 0.1); width: 100%; max-width: 400px; text-align: center; }
+        .logo-login { font-size: 1.8rem; font-weight: 600; color: #3e2723; margin-bottom: 20px; display: flex; justify-content: center; align-items: center; gap: 10px; }
+        h2 { color: #3e2723; margin-bottom: 10px; }
+        .input-group { text-align: left; margin-bottom: 15px; }
+        .input-group label { display: block; font-size: 13px; margin-bottom: 5px; font-weight: 600; color: #3e2723; }
+        input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 12px; box-sizing: border-box; background: #fffdf9; }
+        .login-btn { background: #d2691e; color: white; border: none; width: 100%; padding: 14px; border-radius: 25px; font-weight: 600; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .login-btn:hover { background: #3e2723; transform: translateY(-2px); }
+        .google-btn { display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; color: #3e2723; border: 1px solid #ddd; padding: 10px; border-radius: 25px; font-weight: 600; margin-top: 15px; transition: 0.3s; }
+        .google-btn:hover { background: #f1f1f1; }
+        .error-msg { background: #ffebee; color: #c62828; padding: 10px; border-radius: 10px; font-size: 13px; margin-bottom: 20px; }
+        .forgot-link { display: block; text-align: right; font-size: 11px; color: #8d6e63; text-decoration: none; margin-top: 5px; }
+    </style>
+</head>
+<body>
+
+<div class="login-container">
+    <div class="logo-login">
+        <i class="fas fa-mug-hot" style="color: #d2691e;"></i> Chai Maslaa
+    </div>
+    <h2>Welcome Back!</h2>
+
+    <div th:if="${param.error}" class="error-msg">
+        Invalid mobile number or password.
+    </div>
+
+    <form th:action="@{/login}" method="post">
+        <div class="input-group">
+            <label>Mobile Number</label>
+            <div style="position: relative;">
+                <i class="fas fa-phone" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #d2691e; font-size: 14px;"></i>
+                <input type="text" name="mobileNumber" placeholder="Enter mobile number" required
+                       style="padding-left: 45px;">
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label>Password</label>
+            <div style="position: relative;">
+                <i class="fas fa-lock" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #d2691e; font-size: 14px;"></i>
+                <input type="password" id="passwordField" name="password" placeholder="••••••••" required
+                       style="padding-left: 45px; padding-right: 45px;">
+                <i class="fas fa-eye" id="togglePassword"
+                   style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #8d6e63;"></i>
+            </div>
+            <a href="#" class="forgot-link">Forgot Password?</a>
+        </div>
+
+        <button type="submit" class="login-btn">Login to Account</button>
+    </form>
+
+    <div style="margin: 20px 0; color: #6d4c41; font-size: 14px;">-- OR --</div>
+
+    <a href="/oauth2/authorization/google" class="google-btn">
+        <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" width="20px">
+        Sign in with Google
+    </a>
+
+    <div style="margin-top: 25px; font-size: 13px;">
+        Don't have an account? <a href="/register" style="color: #d2691e; font-weight: 600; text-decoration: none;">Register Now</a>
+    </div>
+</div>
+
+<script>
+    const togglePassword = document.querySelector('#togglePassword');
+    const password = document.querySelector('#passwordField');
+
+    if(togglePassword && password) {
+        togglePassword.addEventListener('click', function () {
+            // Toggle the type attribute
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+
+            // Toggle the eye icon class
+            this.classList.toggle('fa-eye-slash');
+        });
+    }
+</script>
+
+</body>
+</html>
