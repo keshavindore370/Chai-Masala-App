@@ -5,7 +5,7 @@
 [![MongoDB](https://img.shields.io/badge/MongoDB-Database-green.svg)](https://www.mongodb.com/)
 [![Maven](https://img.shields.io/badge/Build-Maven-blue.svg)](https://maven.apache.org/)
 
-A robust, backend-driven Spring Boot web application designed for a custom tea shop. The application exposes REST APIs and controllers to manage product catalogs, handle order placements, track shipping statuses, and maintain secure user authentication using local credentials and Google OAuth2. It also includes an ingredient relationship service powered by the **JGraphT** library.
+A robust, backend-driven Spring Boot web application designed for a custom tea shop. The application exposes REST APIs and controllers to manage product catalogs, handle order placements, track shipping statuses, and maintain secure user authentication using local credentials.
 
 ---
 
@@ -13,7 +13,6 @@ A robust, backend-driven Spring Boot web application designed for a custom tea s
 
 *   **🔐 Authentication & Authorization (Spring Security)**:
     *   Secure local user registration and login using BCrypt password hashing.
-    *   OAuth2 integration for Google sign-in.
     *   Role-based authorization restricting administrator actions (such as viewing all orders and updating statuses) to authorized users.
 *   **📦 Order & Stock Management**:
     *   Business logic to place orders, calculate total bills, and dynamically update inventory stock.
@@ -53,7 +52,7 @@ ChaiMasalaProject/
 │   │   │   ├── service/            # Order services, user services, recipe graph services
 │   │   │   └── ChaiMasalaApplication.java
 │   │   └── resources/
-│   │       └── application.properties # Server port, MongoDB URI, and OAuth2 credentials
+│   │       └── application.properties # Server port, MongoDB URI, and server configurations
 │   └── test/                       # Unit & integration tests
 ├── pom.xml                         # Dependency declaration file
 └── .gitignore                      # Git ignore patterns
