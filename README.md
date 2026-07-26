@@ -1,125 +1,105 @@
-# ☕ Chai Masala E-Commerce Platform
+# ☕ Chai Masala Backend Application
 
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2.3-brightgreen.svg)](https://spring.io/projects/spring-boot)
 [![Java](https://img.shields.io/badge/Java-21-orange.svg)](https://www.oracle.com/java/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-Database-green.svg)](https://www.mongodb.com/)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Maven](https://img.shields.io/badge/Build-Maven-blue.svg)](https://maven.apache.org/)
 
-A premium, full-stack Spring Boot e-commerce web application designed for gourmet tea enthusiasts. **Chai Masala** allows users to browse unique tea blends, place customized orders with real-time stock management, track orders through a visual progress system, and authenticate securely using local credentials or Google OAuth2. It features an innovative ingredient relationship graph powered by **JGraphT** to visualize and analyze Chai recipe compositions.
-
----
-
-## 🌟 Key Features
-
-*   **🔐 Hybrid Authentication System**:
-    *   Secure local sign-up and login with standard password hashing (BCrypt).
-    *   Smooth **Google OAuth2** integration for social login.
-    *   Role-based authorization restricting admin views (orders management) to authorized personnel.
-*   **📊 Chai Recipe Graph (JGraphT)**:
-    *   Models the relationships between different Chai types and their raw ingredients (e.g., Ginger, Cardamom) using a mathematical graph structure.
-    *   Provides high-efficiency pathfinding and relationship analysis, laying the foundation for smart recommendations.
-*   **🛒 E-Commerce & Cart Operations**:
-    *   Interactive cart interface to add/remove products, adjust quantities, and select sizes/weights.
-    *   Dynamic inventory tracking that automatically decrements product stock quantities on successful orders and prevents over-purchasing.
-*   **🚚 Live Order Tracking & Admin Panel**:
-    *   Real-time multi-stage status tracking (`PLACED`, `PROCESSING`, `SHIPPED`, `DELIVERED`, `CANCELLED`).
-    *   Intuitive admin panel to list, filter, update delivery status, or cancel customer orders.
-*   **🎨 Premium Responsive Frontend**:
-    *   Fully styled with modern HTML5/CSS3 and **Thymeleaf** templates.
-    *   Provides user profile settings, order success notifications, and custom dashboards.
+A robust, backend-driven Spring Boot web application designed for a custom tea shop. The application exposes REST APIs and controllers to manage product catalogs, handle order placements, track shipping statuses, and maintain secure user authentication using local credentials and Google OAuth2. It also includes an ingredient relationship service powered by the **JGraphT** library.
 
 ---
 
-## 🛠️ Tech Stack & Architecture
+## ⚙️ Backend Features
 
-*   **Backend Core**: Java 21, Spring Boot 3.2.3 (Starter Web, Thymeleaf, Security)
-*   **Security & OAuth**: Spring Security 6, Spring OAuth2 Client, Thymeleaf Spring Security Extras
-*   **Database**: MongoDB (NoSQL) via Spring Data MongoDB
-*   **Mathematical Modeling**: JGraphT Core (v1.5.2) for relational node graphs
-*   **Utilities**: ModelMapper (Object-to-DTO conversion), Lombok (Boilerplate reduction)
+*   **🔐 Authentication & Authorization (Spring Security)**:
+    *   Secure local user registration and login using BCrypt password hashing.
+    *   OAuth2 integration for Google sign-in.
+    *   Role-based authorization restricting administrator actions (such as viewing all orders and updating statuses) to authorized users.
+*   **📦 Order & Stock Management**:
+    *   Business logic to place orders, calculate total bills, and dynamically update inventory stock.
+    *   Prevents orders when requested quantities exceed available warehouse stock.
+    *   Visual multi-stage order tracking support (e.g. `PLACED`, `PROCESSING`, `SHIPPED`, `DELIVERED`, `CANCELLED`).
+*   **📊 Chai Ingredients Graph Service (JGraphT)**:
+    *   Uses JGraphT to model a simple graph of Chai types (e.g., Masala Chai) and their core ingredients (e.g., Ginger, Cardamom) for queryable relationship mapping.
+*   **⚠️ Global Exception Handling**:
+    *   Centralized exception handling using `@ControllerAdvice` to return clean error messages for resource misses and validation errors.
+
+---
+
+## 🛠️ Tech Stack
+
+*   **Language**: Java 21
+*   **Framework**: Spring Boot 3.2.3 (Web, Security, Data MongoDB)
+*   **Database**: MongoDB (NoSQL)
+*   **Graph Processing**: JGraphT Core (v1.5.2)
 *   **Build Tool**: Maven
+*   **Boilerplate Reduction**: Lombok
 
 ---
 
-## 📂 Project Structure
+## 📂 Project Architecture
 
 ```text
 ChaiMasalaProject/
 ├── src/
 │   ├── main/
 │   │   ├── java/com/chaisharma/chaimasala/
-│   │   │   ├── config/             # Security configs, ModelMapper configurations
+│   │   │   ├── config/             # Security and utility configurations
 │   │   │   ├── controller/         # Auth, Order, and Product HTTP endpoints
 │   │   │   ├── DTO/                # Request & Response Data Transfer Objects
-│   │   │   ├── exception/          # Global Exception Handling and custom Exceptions
+│   │   │   ├── exception/          # Custom exceptions & global exception handler
 │   │   │   ├── model/              # MongoDB Document Models (User, Product, Order, Ingredient)
 │   │   │   ├── repository/         # Spring Data MongoDB Repositories
-│   │   │   ├── service/            # Business Logic (Order processing, Chai Graph relationships)
+│   │   │   ├── service/            # Order services, user services, recipe graph services
 │   │   │   └── ChaiMasalaApplication.java
 │   │   └── resources/
-│   │       ├── templates/          # Thymeleaf HTML Views (index, cart, checkout, tracking)
-│   │       └── application.properties # Application configurations
-│   └── test/                       # Unit & Integration Tests (JUnit 5, Spring Boot Test)
-├── pom.xml                         # Project dependencies and plugins
-└── .gitignore                      # Git exclusion rules
+│   │       └── application.properties # Server port, MongoDB URI, and OAuth2 credentials
+│   └── test/                       # Unit & integration tests
+├── pom.xml                         # Dependency declaration file
+└── .gitignore                      # Git ignore patterns
 ```
 
 ---
 
-## ⚙️ Local Setup Instructions
+## 🚀 How to Run Locally
 
-### Prerequisites
-- **Java Development Kit (JDK)**: Version 21
-- **MongoDB**: Installed and running locally (Default port `27017`)
-- **Maven**: Version 3.8+
+### 1. Prerequisites
+- **JDK 21**
+- **MongoDB** running on port `27017`
 
-### 1. Clone the Repository
-```bash
-git clone https://github.com/keshavindore370/Chai-Masala-App.git
-cd Chai-Masala-App
-```
-
-### 2. Configure Environment Variables
-Open `src/main/resources/application.properties` and customize the configuration. If you intend to use Google OAuth2, fill in your Google Client ID and Secret:
+### 2. Configure application.properties
+Configure your database properties in `src/main/resources/application.properties`:
 ```properties
-# MongoDB Connection
 spring.data.mongodb.uri=mongodb://localhost:27017/chai_masala_db
-
-# Google OAuth2 Credentials
-spring.security.oauth2.client.registration.google.client-id=YOUR_GOOGLE_CLIENT_ID
-spring.security.oauth2.client.registration.google.client-secret=YOUR_GOOGLE_CLIENT_SECRET
-spring.security.oauth2.client.registration.google.scope=profile,email
+server.port=8080
 ```
 
-### 3. Run the Application
-You can run the application directly using the Maven Wrapper (if present) or your local Maven installation:
+### 3. Build and Run
+Execute the application using Maven:
 ```bash
+mvn clean package
 mvn spring-boot:run
 ```
-The server will start on port `8080`. Open your browser and navigate to `http://localhost:8080`.
 
 ---
 
-## 🔌 API Endpoints Summary
+## 🔌 API & HTTP Endpoints
 
-### User & Authentication
-*   `GET /login` - Show login page
-*   `GET /register` - Show registration page
-*   `POST /register` - Register a new user
-*   `GET /account` - User profile details
+### Authentication
+*   `POST /register` - Register a new account
+*   `GET /login` - Login endpoint
 
-### Product Catalog
-*   `GET /` - Home page containing active product listing
-*   `GET /adrak-chai` - Detailed view of the signature Adrak Chai
-*   `GET /cart` - Current user shopping cart
+### Products & Cart
+*   `GET /` - List all active products
+*   `GET /cart` - Retrieve current cart items
 
-### Order Management
-*   `POST /place-order` - Place order via form submission
-*   `POST /api/place-order` - JSON API endpoint for order placement
-*   `GET /order-success` - Order success details
-*   `GET /order-tracking/{id}` - Track order status in real time
+### Orders
+*   `POST /place-order` - Submit a new order via form POST
+*   `POST /api/place-order` - Submit a new order via JSON request body
+*   `GET /order-success?id={id}` - Retrieve details of a successfully placed order
+*   `GET /order-tracking/{id}` - Retrieve real-time shipping tracking status for an order
 *   `POST /order/cancel` - Cancel a pending order
 
-### Administration
-*   `GET /admin/orders` - View all database orders
-*   `POST /admin/update-status` - Update an order's status (`PLACED` -> `PROCESSING` -> etc.)
+### Admin Operations
+*   `GET /admin/orders` - List all client orders
+*   `POST /admin/update-status` - Transition order status (`PLACED` -> `PROCESSING` -> etc.)
