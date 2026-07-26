@@ -4,6 +4,12 @@ target/
 !**/src/test/**/target/
 .kotlin
 
+# Custom Ignored Directories/Files
+.idea/
+*.zip
+files/
+
+
 ### IntelliJ IDEA ###
 .idea/modules.xml
 .idea/jarRepositories.xml
